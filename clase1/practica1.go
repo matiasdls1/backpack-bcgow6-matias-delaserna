@@ -1,10 +1,10 @@
-package main
+package clase1
 
 import (
 	"fmt"
 )
 
-func main() {
+func Practica1() {
 	ejercicio1()
 	ejercicio2()
 	ejercicio3()

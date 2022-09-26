@@ -1,8 +1,8 @@
-package main
+package clase1
 
 import "fmt"
 
-func main() {
+func Practica2() {
 	ej1()
 	ej2()
 	ej3()
@@ -15,8 +15,10 @@ func ej1() {
 
 	for i := 0; i < len(palabra); i++ {
 		cant++
-		fmt.Printf("%c\n", palabra[i])
+		fmt.Printf("\n%c", palabra[i])
 	}
+
+	fmt.Print("\nEjercicio 1\n")
 	fmt.Printf("\nCantidad de letras: %v\n", cant)
 }
 
@@ -26,6 +28,7 @@ func ej2() {
 	var empleado bool = true
 	var antiguedad float64 = 1.3
 	var sueldo int = 150000
+	fmt.Print("\nEjercicio 2\n")
 
 	if edad > 22 {
 		fmt.Print("El cliente es mayor de 22 años.\n")
@@ -67,6 +70,8 @@ func ej2() {
 
 func ej3() {
 	var num int = 7
+	fmt.Print("\nEjercicio 3\n")
+
 	switch num {
 	case 1:
 		fmt.Print("\nEnero")
@@ -101,7 +106,8 @@ func ej4() {
 	var employees = map[string]int{"Benjamin": 20, "Nahuel": 26, "Brenda": 19, "Darío": 44, "Pedro": 30}
 	var cantMayores21 int = 0
 
-	fmt.Printf("La edad de Benjamin es: %v", employees["Benjamin"])
+	fmt.Print("\nEjercicio 4\n")
+	fmt.Printf("\nLa edad de Benjamin es: %v", employees["Benjamin"])
 
 	employees["Federico"] = 25
 
