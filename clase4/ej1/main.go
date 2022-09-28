@@ -19,7 +19,7 @@ func (e *error) Error() string {
 func main() {
 	var salary int = 1000
 	if salary < 150000 {
-		var err error
+		var err *error
 		fmt.Println(err)
 	} else {
 		fmt.Println("Debe pagar impuesto")
