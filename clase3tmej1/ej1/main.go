@@ -5,14 +5,18 @@ import (
 	"os"
 )
 
-func almacenarProducto(id, cantidad int, precio float64) {
-	text := fmt.Sprintf("%d,%.2f,%d", id, precio, cantidad)
+type producto struct {
+	id       int
+	cantidad int
+	precio   float64
+}
+
+func almacenarProducto(p producto) {
+	text := fmt.Sprintf("%d,%.2f,%d", p.id, p.precio, p.cantidad)
 	os.WriteFile("./ejercicio1.csv", []byte(text), 777)
 }
 
 func main() {
-	id := 4500
-	cantidad := 500
-	precio := 3.555
-	almacenarProducto(id, cantidad, precio)
+	producto := producto{id: 1, cantidad: 1, precio: 1.0}
+	almacenarProducto(producto)
 }
