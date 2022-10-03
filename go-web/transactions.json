@@ -1,0 +1,27 @@
+[{
+    "id": 0,
+    "code": "A000",
+    "currency": "PESOS",
+    "amount": 10000.00,
+    "sender": "Matias",
+    "receiver": "Pedro",
+    "date": "21/09/2022"
+},
+{
+    "id": 1,
+    "code": "A001",
+    "currency": "USD",
+    "amount": 200.00,
+    "sender": "Pedro",
+    "receiver": "Juan",
+    "date": "22/09/2022"
+},
+{
+    "id": 2,
+    "code": "A002",
+    "currency": "EUR",
+    "amount": 300.00,
+    "sender": "Matias",
+    "receiver": "Juan",
+    "date": "23/09/2022"
+}]
