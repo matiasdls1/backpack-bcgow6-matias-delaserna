@@ -1,6 +1,6 @@
 package main
 
-import "github.com/matiasdls1/backpack-bcgow6-matias-delaserna/hackaton/internal/service"
+import "hackaton/internal/service"
 
 func main() {
 	var tickets []service.Ticket
