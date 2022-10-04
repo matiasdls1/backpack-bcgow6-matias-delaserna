@@ -11,13 +11,16 @@ import (
 
 type Transaction struct {
 	ID       int     `json:"id"`
-	Code     string  `json:"code"`
-	Currency string  `json:"currency"`
-	Amount   float64 `json:"amount"`
-	Sender   string  `json:"sender"`
-	Receiver string  `json:"receiver"`
-	Date     string  `json:"date"`
+	Code     string  `json:"code" binding:"required"`
+	Currency string  `json:"currency" binding:"required"`
+	Amount   float64 `json:"amount" binding:"required"`
+	Sender   string  `json:"sender" binding:"required"`
+	Receiver string  `json:"receiver" binding:"required"`
+	Date     string  `json:"date" binding:"required"`
 }
+
+var transactionsMemory []Transaction
+var lastID int
 
 func GetAll(c *gin.Context) {
 	transactions := []Transaction{}
@@ -105,6 +108,93 @@ func GetByID(c *gin.Context) {
 	}
 }
 
+func ValidateFields(req Transaction) ([]string, bool) {
+	fields := []string{}
+	if req.ID == 0 {
+		fields = append(fields, "ID")
+	}
+	if req.Code == "" {
+		fields = append(fields, "Code")
+	}
+	if req.Currency == "" {
+		fields = append(fields, "Currency")
+	}
+	if req.Amount == 0.0 {
+		fields = append(fields, "Amount")
+	}
+	if req.Sender == "" {
+		fields = append(fields, "Sender")
+	}
+	if req.Receiver == "" {
+		fields = append(fields, "Receiver")
+	}
+	if req.Date == "" {
+		fields = append(fields, "Date")
+	}
+	if len(fields) == 0 {
+		return fields, false
+	} else {
+		return fields, true
+	}
+}
+func Create(c *gin.Context) {
+	var req Transaction
+	token := c.GetHeader("token")
+	if token != "mdls" {
+		c.JSON(401, gin.H{
+			"status": "error",
+			"error":  "no tiene permisos para realizar la peticion solicitada",
+		})
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(404, gin.H{
+			"status": "error",
+			"error":  err.Error(),
+		})
+		return
+	}
+	// Validate fields
+	fields, err := ValidateFields(req)
+	if err {
+		message, _ := fmt.Printf("el/los campo/s %v es/son requerido/s", fields)
+		c.JSON(400, gin.H{
+			"status": "error",
+			"error":  message,
+		})
+		return
+	}
+
+	// Check if there are tx in memory
+	if len(transactionsMemory) == 0 { // If no tx in memory, get lastID from database
+		transactions := []Transaction{}
+		data, err := os.ReadFile("transactions.json")
+		if err != nil {
+			c.JSON(500, gin.H{
+				"status": "error",
+				"error":  err.Error(),
+			})
+		}
+		err = json.Unmarshal(data, &transactions)
+		if err != nil {
+			c.JSON(500, gin.H{
+				"status": "error",
+				"error":  err.Error(),
+			})
+		}
+		lastID = transactions[len(transactions)-1].ID + 1
+		req.ID = lastID
+	} else { // If there are tx in memory, get the incremental ID
+		lastID++
+		req.ID = lastID
+	}
+	transactionsMemory = append(transactionsMemory, req)
+	c.JSON(200, gin.H{
+		"status": "ok",
+		"data":   req,
+	})
+
+}
+
 func main() {
 	router := gin.Default()
 
@@ -116,5 +206,6 @@ func main() {
 	//router.GET("/transactions", GetAll)
 	router.GET("/transactions", GetFiltered)
 	router.GET("/transactions/:id", GetByID)
+	router.POST("/transactions", Create)
 	router.Run()
 }
