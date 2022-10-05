@@ -1,6 +1,10 @@
 package transactions
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/pkg/store"
+)
 
 /*
 Repositorio, debe tener el acceso a la variable guardada en memoria.
@@ -35,30 +39,62 @@ type Repository interface {
 	UpdateCodeAmount(id int, code string, amount float64) (Transaction, error)
 }
 
-type repository struct{} // struct implementa los metodos de la interfaz
-
-func NewRepository() Repository {
-	return &repository{}
+type repository struct {
+	db store.Store
 }
 
-func (r *repository) GetAll() ([]Transaction, error) {
-	return txs, nil
+func NewRepository(db store.Store) Repository {
+	return &repository{
+		db: db,
+	}
+}
+
+func (r *repository) GetAll() (transactions []Transaction, err error) {
+	err = r.db.Read(&transactions)
+	if err != nil {
+		return nil, err
+	}
+	return transactions, nil
 }
 
 func (r *repository) Store(id int, code, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
+	var txs []Transaction
+	err := r.db.Read(&txs)
+	if err != nil {
+		return Transaction{}, err
+	}
 	tx := Transaction{id, code, currency, amount, sender, receiver, date}
 	txs = append(txs, tx)
-	lastID = tx.ID
+	if err := r.db.Write(txs); err != nil {
+		return Transaction{}, err
+	}
 	return tx, nil
 }
 
 func (r *repository) LastID() (int, error) {
-	return lastID, nil
+	var txs []Transaction
+	err := r.db.Read(&txs)
+	if err != nil {
+		return 0, err
+	}
+	if len(txs) == 0 {
+		return 0, nil
+	}
+
+	return txs[len(txs)-1].ID, nil
 }
 
 func (r *repository) Update(id int, code, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
 	tx := Transaction{Code: code, Currency: currency, Amount: amount, Sender: sender, Receiver: receiver, Date: date}
 	updated := false
+	var txs []Transaction
+	err := r.db.Read(txs)
+	if err != nil {
+		return Transaction{}, err
+	}
+	if len(txs) == 0 {
+		return Transaction{}, nil
+	}
 	for i := range txs {
 		if txs[i].ID == id {
 			tx.ID = id

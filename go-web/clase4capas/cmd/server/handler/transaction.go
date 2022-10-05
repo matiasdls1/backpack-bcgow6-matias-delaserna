@@ -9,6 +9,7 @@ Se deben generar todos los métodos correspondientes a los endpoints
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,7 @@ func NewTransaction(tx transactions.Service) *Transaction {
 func (t *Transaction) GetAll() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
-		if token != "123456" {
+		if token != os.Getenv("TOKEN") {
 			c.JSON(401, gin.H{
 				"status": "error",
 				"error":  "invalid token",
@@ -59,7 +60,7 @@ func (t *Transaction) GetAll() gin.HandlerFunc {
 func (t *Transaction) Store() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
-		if token != "123456" {
+		if token != os.Getenv("TOKEN") {
 			c.JSON(401, gin.H{
 				"status": "error",
 				"error":  "invalid token",
@@ -89,7 +90,7 @@ func (t *Transaction) Store() gin.HandlerFunc {
 func (t *Transaction) Update() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
-		if token != "123456" {
+		if token != os.Getenv("TOKEN") {
 			c.JSON(401, gin.H{
 				"status": "error",
 				"error":  "invalid token",
@@ -169,7 +170,7 @@ func (t *Transaction) Update() gin.HandlerFunc {
 func (t *Transaction) Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("token")
-		if token != "123456" {
+		if token != os.Getenv("TOKEN") {
 			c.JSON(401, gin.H{
 				"status": "error",
 				"error":  "invalid token",
@@ -199,7 +200,7 @@ func (t *Transaction) Delete() gin.HandlerFunc {
 func (t *Transaction) UpdateCodeAmount() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("token")
-		if token != "123456" {
+		if token != os.Getenv("TOKEN") {
 			c.JSON(401, gin.H{
 				"status": "error",
 				"error":  "invalid token",

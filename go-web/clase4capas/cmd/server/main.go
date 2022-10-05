@@ -7,12 +7,16 @@ Se debe implementar el router para los diferentes endpoints
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/cmd/server/handler"
 	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/internal/transactions"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/pkg/store"
 )
 
 func main() {
-	repository := transactions.NewRepository()
+	_ = godotenv.Load()
+	db := store.New(store.FileType, "./transactions.json")
+	repository := transactions.NewRepository(db)
 	service := transactions.NewService(repository)
 	tx := handler.NewTransaction(service)
 	router := gin.Default()

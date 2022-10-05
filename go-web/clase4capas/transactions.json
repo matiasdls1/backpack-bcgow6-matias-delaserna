@@ -1,0 +1,38 @@
+[
+  {
+    "id": 0,
+    "code": "A000",
+    "currency": "PESOS",
+    "amount": 10000,
+    "sender": "Matias",
+    "receiver": "Pedro",
+    "date": "21/09/2022"
+  },
+  {
+    "id": 1,
+    "code": "A001",
+    "currency": "USD",
+    "amount": 200,
+    "sender": "Pedro",
+    "receiver": "Juan",
+    "date": "22/09/2022"
+  },
+  {
+    "id": 2,
+    "code": "A002",
+    "currency": "EUR",
+    "amount": 300,
+    "sender": "Matias",
+    "receiver": "Juan",
+    "date": "23/09/2022"
+  },
+  {
+    "id": 3,
+    "code": "A003",
+    "currency": "EUR",
+    "amount": 1000,
+    "sender": "Matias",
+    "receiver": "Sasuke",
+    "date": "10/10/10"
+  }
+]
