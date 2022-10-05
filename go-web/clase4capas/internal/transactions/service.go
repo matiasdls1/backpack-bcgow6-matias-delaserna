@@ -13,6 +13,8 @@ type Service interface {
 	GetAll() ([]Transaction, error)
 	Store(code, currency string, amount float64, sender, receiver, date string) (Transaction, error)
 	Update(id int, code, currency string, amount float64, sender, receiver, date string) (Transaction, error)
+	Delete(id int) error
+	UpdateCodeAmount(id int, code string, amount float64) (Transaction, error)
 }
 
 type service struct {
@@ -48,4 +50,12 @@ func (s *service) Store(code, currency string, amount float64, sender, receiver,
 
 func (s *service) Update(id int, code, currency string, amount float64, sender, receiver, date string) (Transaction, error) {
 	return s.repository.Update(id, code, currency, amount, sender, receiver, date)
+}
+
+func (s *service) Delete(id int) error {
+	return s.repository.Delete(id)
+}
+
+func (s *service) UpdateCodeAmount(id int, code string, amount float64) (Transaction, error) {
+	return s.repository.UpdateCodeAmount(id, code, amount)
 }

@@ -21,5 +21,6 @@ func main() {
 	grp.POST("/", tx.Store())
 	grp.GET("/", tx.GetAll())
 	grp.PUT("/:id", tx.Update())
+	grp.DELETE("/:id", tx.Delete())
 	router.Run()
 }

@@ -8,6 +8,7 @@ Se deben generar todos los métodos correspondientes a los endpoints
 */
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -154,6 +155,88 @@ func (t *Transaction) Update() gin.HandlerFunc {
 			return
 		}
 		tx, err := t.service.Update(int(id), req.Code, req.Currency, req.Amount, req.Sender, req.Receiver, req.Date)
+		if err != nil {
+			c.JSON(404, gin.H{
+				"status": "error",
+				"error":  err.Error(),
+			})
+			return
+		}
+		c.JSON(200, tx)
+	}
+}
+
+func (t *Transaction) Delete() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.GetHeader("token")
+		if token != "123456" {
+			c.JSON(401, gin.H{
+				"status": "error",
+				"error":  "invalid token",
+			})
+			return
+		}
+		id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"status": "error",
+				"error":  "invalid ID",
+			})
+			return
+		}
+		err = t.service.Delete(int(id))
+		if err != nil {
+			c.JSON(404, gin.H{
+				"status": "error",
+				"error":  err.Error(),
+			})
+			return
+		}
+		c.JSON(200, gin.H{"data": fmt.Sprintf("Transaction %d was deleted.", id)})
+	}
+}
+
+func (t *Transaction) UpdateCodeAmount() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.GetHeader("token")
+		if token != "123456" {
+			c.JSON(401, gin.H{
+				"status": "error",
+				"error":  "invalid token",
+			})
+			return
+		}
+		id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"status": "error",
+				"error":  "invalid ID",
+			})
+			return
+		}
+		var req request
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(400, gin.H{
+				"status": "error",
+				"error":  err.Error(),
+			})
+			return
+		}
+		if req.Code == "" {
+			c.JSON(400, gin.H{
+				"status": "error",
+				"error":  "code is required",
+			})
+			return
+		}
+		if req.Amount == 0 {
+			c.JSON(400, gin.H{
+				"status": "error",
+				"error":  "amount is required",
+			})
+			return
+		}
+		tx, err := t.service.UpdateCodeAmount(int(id), req.Code, req.Amount)
 		if err != nil {
 			c.JSON(404, gin.H{
 				"status": "error",
