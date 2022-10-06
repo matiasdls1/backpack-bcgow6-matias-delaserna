@@ -27,8 +27,9 @@ type Transaction struct {
 	Date     string  `json:"date"`
 }
 
-var txs []Transaction
-var lastID int
+var txs []Transaction // para updates en memoria - va a ser descartado
+
+// var lastID int
 
 type Repository interface {
 	GetAll() ([]Transaction, error)
