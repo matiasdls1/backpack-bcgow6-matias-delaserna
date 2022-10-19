@@ -36,6 +36,14 @@ func NewTransaction(tx transactions.Service) *Transaction {
 	}
 }
 
+// ListTransactions godoc
+// @Summary List transactions
+// @Tags Transactions
+// @Description get transactions
+// @Produce  json
+// @Param token header string true "token"
+// @Success 200 {object} web.Response
+// @Router /transactions [get]
 func (t *Transaction) GetAll() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
@@ -52,6 +60,16 @@ func (t *Transaction) GetAll() gin.HandlerFunc {
 	}
 }
 
+// StoreTransactions godoc
+// @Summary List transactions
+// @Tags Transactions
+// @Description store transactions
+// @Accept  json
+// @Produce  json
+// @Param token header string true "token"
+// @Param transaction body request true "Transaction to store"
+// @Success 200 {object} web.Response
+// @Router /transactions [post]
 func (t *Transaction) Store() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")

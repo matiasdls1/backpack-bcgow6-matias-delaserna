@@ -34,5 +34,14 @@
     "sender": "Matias",
     "receiver": "Sasuke",
     "date": "10/10/10"
+  },
+  {
+    "id": 4,
+    "code": "A004",
+    "currency": "CAD",
+    "amount": 20000,
+    "sender": "Bill Gates",
+    "receiver": "Matias",
+    "date": "29/07/1997"
   }
 ]
