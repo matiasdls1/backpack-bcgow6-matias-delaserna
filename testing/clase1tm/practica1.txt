@@ -1,0 +1,9 @@
+1) Las diferencias son que en white box conocemos los detalles internos, y en black box el diseo interno es desconocido para la prueba.
+
+2) Test funcional: Pruebas basadas en la entrada y salida del software, donde se valida que ante un escenario el resultado sea siempre 
+igual al esperado.
+
+3) Test de Integracin: Son tests que se enfocan en la comunicacin entre los distintos componentes o unidades del software.
+
+4) Dimensiones en MELI: Funcionalidad, Rendimiento, Fiabilidad, Seguridad y Mantenibilidad.
+
