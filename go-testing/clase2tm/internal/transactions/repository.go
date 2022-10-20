@@ -3,7 +3,7 @@ package transactions
 import (
 	"fmt"
 
-	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/pkg/store"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/pkg/store"
 )
 
 /*
@@ -131,15 +131,17 @@ func (r *repository) Delete(id int) error {
 func (r *repository) UpdateCodeAmount(id int, code string, amount float64) (Transaction, error) {
 	var tx Transaction
 	updated := false
-	for i := range txs {
-		if txs[i].ID == id {
-			txs[i].Code = code
-			txs[i].Amount = amount
-			updated = true
-			tx = txs[i]
-			break
-		}
+	err := r.db.Read(&tx)
+	if err != nil {
+		return Transaction{}, err
 	}
+	if tx.ID == id {
+		tx.Code = code
+		tx.Amount = amount
+		updated = true
+	}
+	// for i := range txs {
+	// }
 	if !updated {
 		return Transaction{}, fmt.Errorf("Transaction %d not found", id)
 	}

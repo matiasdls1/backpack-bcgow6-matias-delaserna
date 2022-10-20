@@ -13,8 +13,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/internal/transactions"
-	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/pkg/web"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/internal/transactions"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/pkg/web"
 )
 
 type request struct {

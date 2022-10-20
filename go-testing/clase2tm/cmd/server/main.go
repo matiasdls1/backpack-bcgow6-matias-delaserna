@@ -10,11 +10,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/cmd/server/handler"
-
-	docs "github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/docs"
-	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/internal/transactions"
-	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-web/clase4capas/pkg/store"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/cmd/server/handler"
+	docs "github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/docs"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/internal/transactions"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-testing/clase2tm/pkg/store"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
