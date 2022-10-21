@@ -93,9 +93,6 @@ func (r *repository) Update(id int, code, currency string, amount float64, sende
 	if err != nil {
 		return Transaction{}, err
 	}
-	if len(txs) == 0 {
-		return Transaction{}, nil
-	}
 	for i := range txs {
 		if txs[i].ID == id {
 			tx.ID = id

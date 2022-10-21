@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,6 +16,9 @@ func (m *MockStorage) Read(data interface{}) error {
 	m.ReadWasCalled = true
 	a := data.(*[]Transaction)
 	*a = m.dataMock
+	if len(m.dataMock) == 0 {
+		return fmt.Errorf("no transactions found")
+	}
 	return nil
 }
 
@@ -107,6 +111,70 @@ func TestServiceIntegrationUpdate(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, mockStorage.dataMock[1], result)
 	assert.True(t, mockStorage.ReadWasCalled)
+}
+
+func TestServiceIntegrationUpdateBad(t *testing.T) {
+	// Arrange
+	inicial := []Transaction{}
+	tx := Transaction{
+		ID:       1,
+		Code:     "A001",
+		Currency: "EUROS",
+		Amount:   500,
+		Sender:   "Juan",
+		Receiver: "Lucas",
+		Date:     "20/10/2022",
+	}
+	mockStorage := &MockStorage{
+		dataMock:      inicial,
+		ReadWasCalled: false,
+	}
+
+	repository := NewRepository(mockStorage)
+	service := NewService(repository)
+
+	// Act
+	_, err := service.Update(tx.ID, tx.Code, tx.Currency, tx.Amount, tx.Sender, tx.Receiver, tx.Date)
+
+	// Assert
+	assert.NotNil(t, err)
+}
+
+func TestServiceIntegrationUpdateBadNotFound(t *testing.T) {
+	// Arrange
+	inicial := []Transaction{
+		{
+			ID:       0,
+			Code:     "A001",
+			Currency: "EUROS",
+			Amount:   500,
+			Sender:   "Juan",
+			Receiver: "Lucas",
+			Date:     "20/10/2022",
+		},
+	}
+	tx := Transaction{
+		ID:       1,
+		Code:     "A001",
+		Currency: "EUROS",
+		Amount:   500,
+		Sender:   "Juan",
+		Receiver: "Lucas",
+		Date:     "20/10/2022",
+	}
+	mockStorage := &MockStorage{
+		dataMock:      inicial,
+		ReadWasCalled: false,
+	}
+
+	repository := NewRepository(mockStorage)
+	service := NewService(repository)
+
+	// Act
+	_, err := service.Update(tx.ID, tx.Code, tx.Currency, tx.Amount, tx.Sender, tx.Receiver, tx.Date)
+
+	// Assert
+	assert.NotNil(t, err)
 }
 
 func TestDelete(t *testing.T) {

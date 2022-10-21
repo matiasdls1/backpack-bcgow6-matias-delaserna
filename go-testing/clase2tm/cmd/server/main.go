@@ -44,5 +44,8 @@ func main() {
 	grp.GET("/", tx.GetAll())
 	grp.PUT("/:id", tx.Update())
 	grp.DELETE("/:id", tx.Delete())
-	router.Run()
+	err := router.Run()
+	if err != nil {
+		return
+	}
 }

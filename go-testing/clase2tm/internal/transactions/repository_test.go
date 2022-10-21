@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,6 +19,9 @@ type MockStore struct {
 func (d *StubStore) Read(data interface{}) error { //(transaction []Transaction) {
 	castedData := data.(*[]Transaction)
 	*castedData = d.data
+	if len(*castedData) == 0 {
+		return fmt.Errorf("no transactions found")
+	}
 	return nil
 }
 
@@ -31,6 +35,9 @@ func (m *MockStore) Read(data interface{}) error {
 	m.ReadWasCalled = true
 	castedData := data.(*Transaction)
 	*castedData = m.BeforeUpdate
+	if m.BeforeUpdate.ID < 0 {
+		return fmt.Errorf("id is out of range")
+	}
 	return nil
 }
 
@@ -71,6 +78,19 @@ func TestGetAll(t *testing.T) {
 	assert.Equal(t, txs, resultado)
 }
 
+func TestGetAllBad(t *testing.T) {
+	// Arrange
+	txs = []Transaction{}
+	myStub := &StubStore{data: txs}
+	repository := NewRepository(myStub)
+
+	// Act
+	_, err := repository.GetAll()
+
+	// Assert
+	assert.NotNil(t, err)
+}
+
 func TestUpdateCodeAmount(t *testing.T) {
 	// Arrange
 	beforeUpdate := Transaction{
@@ -104,5 +124,53 @@ func TestUpdateCodeAmount(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, afterUpdate, resultado)
 	assert.True(t, myMock.ReadWasCalled)
+}
 
+func TestUpdateCodeAmountBadID(t *testing.T) {
+	// Arrange
+	beforeUpdate := Transaction{
+		ID:       -2,
+		Code:     "A000",
+		Currency: "PESOS",
+		Amount:   10000,
+		Sender:   "Matias",
+		Receiver: "Pedro",
+		Date:     "19/10/2022",
+	}
+	newCode := "B000"
+	newAmount := 200000.0
+
+	myMock := &MockStore{BeforeUpdate: beforeUpdate, ReadWasCalled: false}
+	repository := NewRepository(myMock)
+
+	// Act
+	_, err := repository.UpdateCodeAmount(beforeUpdate.ID, newCode, newAmount)
+
+	// Assert
+	assert.NotNil(t, err)
+}
+
+func TestUpdateCodeAmountTransactionNotFound(t *testing.T) {
+	// Arrange
+	beforeUpdate := Transaction{
+		// ID: 2,
+		// Code:     "A000",
+		// Currency: "PESOS",
+		// Amount:   10000,
+		// Sender:   "Matias",
+		// Receiver: "Pedro",
+		// Date:     "19/10/2022",
+	}
+	newCode := ""
+	newAmount := 0.0
+
+	myMock := &MockStore{BeforeUpdate: beforeUpdate, ReadWasCalled: false}
+	repository := NewRepository(myMock)
+
+	// Act
+	result, err := repository.UpdateCodeAmount(1, newCode, newAmount)
+
+	// Assert
+	assert.Equal(t, Transaction{}, result)
+	assert.NotNil(t, err)
 }
