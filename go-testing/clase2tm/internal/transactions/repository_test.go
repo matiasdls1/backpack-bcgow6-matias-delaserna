@@ -10,7 +10,7 @@ type StubStore struct {
 	data []Transaction
 }
 
-type MockStorage struct {
+type MockStore struct {
 	BeforeUpdate  Transaction
 	ReadWasCalled bool
 }
@@ -27,14 +27,14 @@ func (d *StubStore) Write(data interface{}) error {
 	return nil
 }
 
-func (m *MockStorage) Read(data interface{}) error {
+func (m *MockStore) Read(data interface{}) error {
 	m.ReadWasCalled = true
 	castedData := data.(*Transaction)
 	*castedData = m.BeforeUpdate
 	return nil
 }
 
-func (m *MockStorage) Write(data interface{}) error {
+func (m *MockStore) Write(data interface{}) error {
 	return nil
 }
 
@@ -94,7 +94,7 @@ func TestUpdateCodeAmount(t *testing.T) {
 	newCode := "B000"
 	newAmount := 200000.0
 
-	myMock := &MockStorage{BeforeUpdate: beforeUpdate, ReadWasCalled: false}
+	myMock := &MockStore{BeforeUpdate: beforeUpdate, ReadWasCalled: false}
 	repository := NewRepository(myMock)
 
 	// Act

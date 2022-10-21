@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.8.1
-	github.com/go-playground/assert/v2 v2.0.1
 	github.com/joho/godotenv v1.4.0
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a

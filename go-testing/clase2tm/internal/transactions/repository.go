@@ -89,7 +89,7 @@ func (r *repository) Update(id int, code, currency string, amount float64, sende
 	tx := Transaction{Code: code, Currency: currency, Amount: amount, Sender: sender, Receiver: receiver, Date: date}
 	updated := false
 	var txs []Transaction
-	err := r.db.Read(txs)
+	err := r.db.Read(&txs)
 	if err != nil {
 		return Transaction{}, err
 	}
@@ -113,6 +113,11 @@ func (r *repository) Update(id int, code, currency string, amount float64, sende
 func (r *repository) Delete(id int) error {
 	deleted := false
 	var index int
+	var txs []Transaction
+	err := r.db.Read(&txs)
+	if err != nil {
+		return err
+	}
 	for i := range txs {
 		if txs[i].ID == id {
 			index = i
