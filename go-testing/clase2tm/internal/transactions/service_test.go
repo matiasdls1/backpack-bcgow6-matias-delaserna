@@ -217,6 +217,23 @@ func TestDelete(t *testing.T) {
 
 func TestDeleteBad(t *testing.T) {
 	// Arrange
+	inicial := []Transaction{}
+	mockStorage := &MockStorage{
+		dataMock:      inicial,
+		ReadWasCalled: false,
+	}
+	repository := NewRepository(mockStorage)
+	service := NewService(repository)
+
+	// Act
+	err := service.Delete(10)
+
+	// Assert
+	assert.NotNil(t, err)
+}
+
+func TestDeleteBadNotFound(t *testing.T) {
+	// Arrange
 	inicial := []Transaction{
 		{
 			ID:       0,
