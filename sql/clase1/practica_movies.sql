@@ -25,5 +25,3 @@ select title from movies where year(release_date) between 2004 and 2008;
 -- 13 Traer el título de las películas con el rating mayor a 3, con más de 1 premio y 
 -- con fecha de lanzamiento entre el año 1988 al 2009. Ordenar los resultados por rating.
 select title from movies where rating > 3 and awards > 1 and year(release_date) between 1988 and 2009 order by rating desc;
-
-
