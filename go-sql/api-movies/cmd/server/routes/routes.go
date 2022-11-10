@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/cmd/server/handler"
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/movie"
 	"database/sql"
+
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/cmd/server/handler"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/movie"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,7 +37,7 @@ func (r *router) buildSellerRoutes() {
 	service := movie.NewService(repo)
 	handler := handler.NewMovie(service)
 	r.rg.GET("/movies", handler.GetAll())
-	r.rg.GET("/movies/:title", handler.GetByTitle())
+	r.rg.GET("/movies/title/:title", handler.GetByTitle())
 	r.rg.GET("/movies/:id", handler.Get())
 	r.rg.POST("/movies", handler.Create())
 	r.rg.DELETE("/movies/:id", handler.Delete())

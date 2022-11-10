@@ -1,11 +1,12 @@
 package movie
 
 import (
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
-	isql "backpack-bcgow6-matias-delaserna/go-sql/api-movies/pkg/sql"
 	"context"
 	"database/sql"
 	"errors"
+
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
+	isql "github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/pkg/sql"
 )
 
 type Repository interface {

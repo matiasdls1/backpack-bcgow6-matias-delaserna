@@ -1,9 +1,10 @@
 package movie
 
 import (
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
 	"context"
 	"errors"
+
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
 )
 
 type Service interface {

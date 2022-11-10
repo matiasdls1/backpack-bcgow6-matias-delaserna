@@ -1,8 +1,8 @@
 package main
 
 import (
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/cmd/server/routes"
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/pkg/db"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/cmd/server/routes"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/pkg/db"
 )
 
 func main() {

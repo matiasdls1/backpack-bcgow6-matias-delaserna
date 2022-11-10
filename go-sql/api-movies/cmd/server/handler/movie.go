@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
-	"backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/movie"
 	"net/http"
 	"strconv"
+
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
+	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/movie"
 
 	"github.com/gin-gonic/gin"
 )
@@ -65,12 +66,12 @@ func (m *Movie) Create() gin.HandlerFunc {
 		var movie domain.Movie
 		err := ctx.ShouldBindJSON(&movie)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.JSON(http.StatusBadRequest, gin.H{"error 1": err.Error()})
 		}
 
 		movie, err = m.service.Save(ctx, movie)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.JSON(http.StatusBadRequest, gin.H{"error 2": err.Error()})
 			return
 		}
 
