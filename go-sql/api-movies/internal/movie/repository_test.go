@@ -8,12 +8,10 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	_ "github.com/DATA-DOG/go-sqlmock"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/internal/domain"
 	"github.com/matiasdls1/backpack-bcgow6-matias-delaserna/go-sql/api-movies/pkg/sql"
 	"github.com/stretchr/testify/assert"
-	_ "github.com/stretchr/testify/assert"
 )
 
 var (
@@ -124,4 +122,37 @@ func Test_RepositoryGetAllFail(t *testing.T) {
 	assert.EqualError(t, err, ERRORFORZADO.Error())
 	assert.Empty(t, resultMovies)
 	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestRepositoryUpdateOk(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	t.Run("Update Ok", func(t *testing.T) {
+		mock.ExpectPrepare(regexp.QuoteMeta(sql.UPDATE_MOVIE))
+		mock.ExpectExec(regexp.QuoteMeta(sql.UPDATE_MOVIE)).WithArgs(movie_test.ID, movie_test.Title, movie_test.Rating, movie_test.Awards, movie_test.Length, movie_test.Genre_id).WillReturnResult(sqlmock.NewResult(0, 1))
+
+		columns := []string{"id", "title", "rating", "awards", "length", "genre_id"}
+		rows := sqlmock.NewRows(columns)
+		rows.AddRow(movie_test.ID, movie_test.Title, movie_test.Rating, movie_test.Awards, movie_test.Length, movie_test.Genre_id)
+		mock.ExpectQuery(regexp.QuoteMeta(sql.GET_MOVIE)).WithArgs(1).WillReturnRows(rows)
+
+		repository := NewRepository(db)
+		ctx := context.TODO()
+
+		movie_update := domain.Movie{
+			ID:    1,
+			Title: "Cars 2",
+		}
+
+		err := repository.Update(ctx, movie_update, movie_test.ID)
+		assert.NoError(t, err)
+
+		movieResult, err := repository.Get(ctx, movie_test.ID)
+		assert.NoError(t, err)
+		movie_test.Title = "Cars 2"
+		assert.Equal(t, movie_test, movieResult)
+
+	})
 }
