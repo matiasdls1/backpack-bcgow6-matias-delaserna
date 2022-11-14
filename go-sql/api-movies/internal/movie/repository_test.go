@@ -130,29 +130,17 @@ func TestRepositoryUpdateOk(t *testing.T) {
 	defer db.Close()
 
 	t.Run("Update Ok", func(t *testing.T) {
-		mock.ExpectPrepare(regexp.QuoteMeta(sql.UPDATE_MOVIE))
-		mock.ExpectExec(regexp.QuoteMeta(sql.UPDATE_MOVIE)).WithArgs(movie_test.ID, movie_test.Title, movie_test.Rating, movie_test.Awards, movie_test.Length, movie_test.Genre_id).WillReturnResult(sqlmock.NewResult(0, 1))
+		m := movie_test
+		m.Title = "Cars 2"
 
-		columns := []string{"id", "title", "rating", "awards", "length", "genre_id"}
-		rows := sqlmock.NewRows(columns)
-		rows.AddRow(movie_test.ID, movie_test.Title, movie_test.Rating, movie_test.Awards, movie_test.Length, movie_test.Genre_id)
-		mock.ExpectQuery(regexp.QuoteMeta(sql.GET_MOVIE)).WithArgs(1).WillReturnRows(rows)
-
+		mock.ExpectPrepare(regexp.QuoteMeta(sql.UPDATE_MOVIE)).
+			ExpectExec().WithArgs(m.Title, m.Rating, m.Awards, m.Length, m.Genre_id, m.ID).WillReturnResult(sqlmock.NewResult(0, 1))
 		repository := NewRepository(db)
-		ctx := context.TODO()
-
-		movie_update := domain.Movie{
-			ID:    1,
-			Title: "Cars 2",
-		}
-
-		err := repository.Update(ctx, movie_update, movie_test.ID)
+		err := repository.Update(context.TODO(), m, 1)
 		assert.NoError(t, err)
-
-		movieResult, err := repository.Get(ctx, movie_test.ID)
-		assert.NoError(t, err)
+		assert.NoError(t, mock.ExpectationsWereMet())
 		movie_test.Title = "Cars 2"
-		assert.Equal(t, movie_test, movieResult)
+		assert.Equal(t, m, movie_test)
 
 	})
 }
